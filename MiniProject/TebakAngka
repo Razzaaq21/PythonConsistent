@@ -1,0 +1,25 @@
+import random
+
+kesempatan = 3
+
+angka = random.randrange(1, 5)
+
+while kesempatan > 0:
+    pilih = int(input("Tebak Angka: "))
+
+    if pilih == angka:
+        print(angka)
+        print("Kamu benar")
+        break
+    elif pilih < angka:
+        print("Angka Terlalu Kecil")
+        kesempatan -= 1
+        print("Nyawa sisa ", kesempatan)
+        if kesempatan == 0:
+            print("Kamu Kalah")
+    elif pilih > angka:
+        print("Angka Terlalu Besar")
+        kesempatan -= 1
+        print("Nyawa sisa ", kesempatan)
+        if kesempatan == 0:
+            print("Kamu Kalah")
