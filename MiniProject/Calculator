@@ -1,0 +1,20 @@
+while True:
+    angka1 = float(input("Masukkan Angka Pertama: "))
+
+    op = input("Pilih operator + - * /: ")
+
+    angka2 = float(input("Masukkan Angka Kedua: "))
+
+    if op == "+":
+        print(angka1 + angka2)
+    elif op == "-":
+        print(angka1 - angka2)
+    elif op == "*":
+        print(angka1 * angka2)
+    elif op == "/":
+        print(angka1 / angka2)
+
+    repeattask = input("Continue? Y/N: ")
+
+    if repeattask != "Y":
+        break
