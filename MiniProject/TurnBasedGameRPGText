@@ -1,0 +1,159 @@
+import random
+
+def village():
+    print("1. Go to Forest")
+    print("2. Check Inventory")
+    print("3. Rest")
+    print("4. Exit")
+
+def forest():
+    print("1. Go back to Village")
+    print("2. Go to Cave")
+    print("3. Go to River")
+
+def cave():
+    print("1. Go deeper")
+    print("2. Dig rocks")
+    print("3. Go back to Forest")
+    print("4. Go to Hell")
+
+def river():
+    print("1. Drink Water")
+    print("2. Submit gold to wishing well")
+    print("3. Go back to Forest")
+
+def hell():
+    print("1. Fight Demon King")
+    print("2. Go to Hell Cave")
+    print("3. Return to cave")
+
+weapons = ["Gungnir", "Devil Sword", "Excalibur"]
+enemy = ["Goblin", "Dragon", None]
+
+player = {"Health": 100, "Gold": 0, "Damage": 0, "Weapon": None}
+enemy_data = {"Goblin": {"Health": 100, "Damage": 10}, "Dragon": {"Health": 100, "Damage": 12}}
+boss_enemy = {"Demon King": {"Health": 200, "Damage": 25}, "Demon Dragon": {"Health": 150, "Damage": 20}}
+
+current_location = "Village"
+
+while True:
+    if current_location == "Village":
+        village()
+        choice_village = input("Choose your action: ")
+        if choice_village == "1":
+            current_location = "Forest"
+        elif choice_village == "2":
+            print(f"You have {player["Gold"]} Gold")
+            if player.get("Weapon") == None:
+                print("You have no weapon currently")
+            else:
+                print(player.get("Weapon"))
+        elif choice_village == "3":
+            if player["Health"] == 100:
+                print("Your Health is Full")
+            else:
+                player["Health"] += 10
+        elif choice_village == "4":
+            print("Game Over")
+            break
+    elif current_location == "Forest":
+        forest()
+        choice_forest = input("Choose your action: ")
+        if choice_forest == "1":
+            current_location = "Village"
+        elif choice_forest == "2":
+            current_location = "Cave"
+        else:
+            current_location = "River"
+    elif current_location == "River":
+        river()
+        choice_river= input("Choose your action: ")
+        if choice_river == "1":
+            if player["Health"] == 100:
+                print("Your Health is Full")
+            else:
+                player["Health"] += 10
+                print(f"Current Health: {player["Health"]}")
+        elif choice_river == "2":
+            if player["Gold"] >= 100:
+                take_weapon = input("Do you want to submit the gold into wishing well? ")
+                if take_weapon == "yes":
+                    print("You got Excalibur")
+                    player.update({"Weapon": weapons[2]})
+                    player.update({"Damage": 10})
+                    player["Health"] += 10
+                    player["Gold"] -= 100
+                else:
+                    current_location = "River"
+            elif player["Gold"] < 100:
+                print("You dont have enough gold")
+        elif choice_river == "3":
+            current_location = "Forest"
+    elif current_location == "Cave":
+        cave()
+        choice_cave = input("Choose your action: ")
+        if choice_cave == "1":
+            enemy_list = random.choice(enemy)
+            if enemy_list != None:
+                print(f"You Encountered {enemy_list}")
+                cave_enemy = enemy_data[enemy_list]
+                print("1. Attack")
+                print("2. Flee")
+                combat_action = input("Choose Your Action: ")
+                if combat_action == "1":
+                    while player["Health"] > 0 and cave_enemy["Health"] > 0:
+                        cave_enemy["Health"] -= player["Damage"]
+                        if cave_enemy["Health"] <= 0:
+                            print("You Win")
+                            print(f"You've got {weapons[0]}")
+                            player.update({"Weapon": weapons[0]})
+                            player.update({"Damage": 50})
+                            break
+                        player["Health"] -= cave_enemy["Damage"]
+                        if player["Health"] <= 0:
+                            print("You Lose")
+                            break
+                elif combat_action == "2":
+                    current_location = "Cave"
+        elif choice_cave == "2":
+            player["Gold"] += random.randrange(100)
+            print(f"You Found Gold, current gold {player["Gold"]}")
+        elif choice_cave == "3":
+            current_location = "Forest"
+        else:
+            if player["Weapon"] != weapons[0]:
+                print("You can't enter Hell yet")
+            else:
+                current_location = "Hell"
+    elif current_location == "Hell":
+        hell()
+        choice_hell = input("Choose your action: ")
+        if choice_hell == "1":
+            hell_enemy = boss_enemy["Demon King"]
+            while player["Health"] > 0 and hell_enemy["Health"] > 0:
+                hell_enemy["Health"] -= player["Damage"]
+                if hell_enemy["Health"] <= 0:
+                    print(f"You Win, You've got {weapons[1]}")
+                    player.update({"Weapon": weapons[1]})
+                    player.update({"Damage": 100})
+                    break
+                player["Health"] -= hell_enemy["Damage"]
+                if player["Health"] <= 0:
+                    print("You Lose")
+                    break
+        if choice_hell == "2":
+            if player["Weapon"] != weapons[1]:
+                print("You can't enter Hell Cave yet")
+            else:
+                hell_enemy = boss_enemy["Demon Dragon"]
+                while player["Health"] > 0 and hell_enemy["Health"] > 0:
+                    hell_enemy["Health"] -= player["Damage"]
+                    if hell_enemy["Health"] <= 0:
+                        print("You defeat the final boss, Congratulations")
+                        break
+                    player["Health"] -= hell_enemy["Damage"]
+                    if player["Health"] <= 0:
+                        print("You Lose")
+                        break
+        else:
+            current_location = "Cave"
